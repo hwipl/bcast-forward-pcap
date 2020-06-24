@@ -41,10 +41,13 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 		return // panic?
 	}
 	ip, _ := ipLayer.(*layers.IPv4)
-	ip.DstIP = net.IPv4(192, 168, 1, 1)
 
+	// print packet info to console
+	fmt.Printf("Got packet: %s:%d -> %s:%d\n", ip.SrcIP,
+		udp.SrcPort, ip.DstIP, udp.DstPort)
 
 	// serialize modified ip layer
+	ip.DstIP = net.IPv4(192, 168, 1, 1)
 	ipBuf := gopacket.NewSerializeBuffer()
 	err := ip.SerializeTo(ipBuf, serializeOpts)
 	if err != nil {
@@ -63,7 +66,6 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 	var buf bytes.Buffer
 	l := packet.Layers()
 	for _, layer := range l {
-		fmt.Println(layer.LayerType())
 		switch layer.LayerType() {
 		case layers.LayerTypeIPv4:
 			buf.Write(ipBuf.Bytes())
@@ -73,7 +75,6 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 			buf.Write(layer.LayerContents())
 		}
 	}
-	fmt.Println(buf.Bytes())
 	h.outHandle.WritePacketData(buf.Bytes())
 }
 

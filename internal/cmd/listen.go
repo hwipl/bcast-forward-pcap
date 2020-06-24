@@ -81,7 +81,10 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 				buf.Write(layer.LayerContents())
 			}
 		}
-		h.outHandle.WritePacketData(buf.Bytes())
+		err = h.outHandle.WritePacketData(buf.Bytes())
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 

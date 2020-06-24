@@ -92,7 +92,7 @@ func listen() {
 
 	// configure pcap
 	pcapFile := ""
-	pcapDevice := "wg0"
+	pcapDevice := dev
 	pcapFilter := "ip dst host 255.255.255.255"
 	pcapSnaplen := 2048
 

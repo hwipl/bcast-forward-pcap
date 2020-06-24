@@ -11,6 +11,9 @@ import (
 
 // global variables set via command line arguments:
 var (
+	// dev is the device to read packets from
+	dev string
+
 	// dport is the destination port for packet matching
 	dport layers.UDPPort
 
@@ -28,6 +31,8 @@ func parseCommandLine() {
 	var src = ""
 
 	// set command line arguments
+	flag.StringVar(&dev, "i", dev,
+		"read packets from this network `interface`")
 	flag.IntVar(&port, "p", port,
 		"only forward packets with this destination `port`")
 	flag.StringVar(&src, "s", src, "rewrite source address to this `IP`")

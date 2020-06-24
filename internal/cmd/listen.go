@@ -12,6 +12,14 @@ import (
 	"github.com/hwipl/packet-go/pkg/pcap"
 )
 
+var (
+	// serializeOpts are options for serialize layers
+	serializeOpts = gopacket.SerializeOptions{
+		FixLengths:       false,
+		ComputeChecksums: true,
+	}
+)
+
 type handler struct {
 	outHandle *gopktPcap.Handle
 }
@@ -35,15 +43,10 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 	ip, _ := ipLayer.(*layers.IPv4)
 	ip.DstIP = net.IPv4(192, 168, 1, 1)
 
-	// serialize layers
-	opts := gopacket.SerializeOptions{
-		FixLengths:       false,
-		ComputeChecksums: true,
-	}
 
 	// serialize modified ip layer
 	ipBuf := gopacket.NewSerializeBuffer()
-	err := ip.SerializeTo(ipBuf, opts)
+	err := ip.SerializeTo(ipBuf, serializeOpts)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,7 +54,7 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 	// serialize udp layer to recalculate checksum
 	udpBuf := gopacket.NewSerializeBuffer()
 	udp.SetNetworkLayerForChecksum(ip)
-	err = udp.SerializeTo(udpBuf, opts)
+	err = udp.SerializeTo(udpBuf, serializeOpts)
 	if err != nil {
 		log.Fatal(err)
 	}

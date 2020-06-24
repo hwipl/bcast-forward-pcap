@@ -23,7 +23,7 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 		return
 	}
 	udp, _ := udpLayer.(*layers.UDP)
-	if udp.DstPort != 6112 {
+	if udp.DstPort != dport {
 		return
 	}
 

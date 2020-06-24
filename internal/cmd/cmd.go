@@ -23,7 +23,7 @@ func parseCommandLine() {
 	flag.Parse()
 
 	// make sure port is valid
-	if port < 1 || port > 65535 {
+	if port < 0 || port > 65535 {
 		log.Fatal("invalid port")
 	}
 	dport = layers.UDPPort(port)

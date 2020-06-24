@@ -47,7 +47,10 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 
 	// forward packet to all destination IPs
 	for _, dest := range dests {
-		// modify destination IP
+		// modify source and destination IP
+		if srcIP != nil {
+			ip.SrcIP = srcIP
+		}
 		ip.DstIP = dest
 
 		// serialize modified ip layer

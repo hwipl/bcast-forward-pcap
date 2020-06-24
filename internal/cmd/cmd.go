@@ -14,6 +14,9 @@ var (
 	// dport is the destination port for packet matching
 	dport layers.UDPPort
 
+	// srcIP is the source IP used for source IP rewriting
+	srcIP net.IP
+
 	// dests is the list of IPs to forward the packets to
 	dests []net.IP
 )
@@ -22,11 +25,12 @@ var (
 func parseCommandLine() {
 	var port = 6112
 	var dest = ""
+	var src = ""
 
 	// set command line arguments
 	flag.IntVar(&port, "p", port,
 		"only forward packets with this destination `port`")
-	// flag.StringVar(&src, "s", src, "rewrite source address to this `IP`")
+	flag.StringVar(&src, "s", src, "rewrite source address to this `IP`")
 	flag.StringVar(&dest, "d", dest, "forward broadcast packets to "+
 		"this comma-separated list of `IPs`, "+
 		"e.g., \"192.168.1.1,192.168.1.2\"")
@@ -37,6 +41,14 @@ func parseCommandLine() {
 		log.Fatal("invalid port")
 	}
 	dport = layers.UDPPort(port)
+
+	// parse source IP
+	if src != "" {
+		srcIP = net.ParseIP(src).To4()
+		if srcIP == nil {
+			log.Fatal("invalid source IP: ", src)
+		}
+	}
 
 	// make sure destination IPs are present and valid
 	if dest == "" {

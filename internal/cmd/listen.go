@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-	"net"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
@@ -35,7 +34,7 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 		return
 	}
 
-	// get first ip layer and modify destination IP
+	// get first ip layer
 	ipLayer := packet.Layer(layers.LayerTypeIPv4)
 	if ipLayer == nil {
 		return // panic?
@@ -46,36 +45,41 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 	fmt.Printf("Got packet: %s:%d -> %s:%d\n", ip.SrcIP,
 		udp.SrcPort, ip.DstIP, udp.DstPort)
 
-	// serialize modified ip layer
-	ip.DstIP = net.IPv4(192, 168, 1, 1)
-	ipBuf := gopacket.NewSerializeBuffer()
-	err := ip.SerializeTo(ipBuf, serializeOpts)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// forward packet to all destination IPs
+	for _, dest := range dests {
+		// modify destination IP
+		ip.DstIP = dest
 
-	// serialize udp layer to recalculate checksum
-	udpBuf := gopacket.NewSerializeBuffer()
-	udp.SetNetworkLayerForChecksum(ip)
-	err = udp.SerializeTo(udpBuf, serializeOpts)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// write all layers to buffer
-	var buf bytes.Buffer
-	l := packet.Layers()
-	for _, layer := range l {
-		switch layer.LayerType() {
-		case layers.LayerTypeIPv4:
-			buf.Write(ipBuf.Bytes())
-		case layers.LayerTypeUDP:
-			buf.Write(udpBuf.Bytes())
-		default:
-			buf.Write(layer.LayerContents())
+		// serialize modified ip layer
+		ipBuf := gopacket.NewSerializeBuffer()
+		err := ip.SerializeTo(ipBuf, serializeOpts)
+		if err != nil {
+			log.Fatal(err)
 		}
+
+		// serialize udp layer to recalculate checksum
+		udpBuf := gopacket.NewSerializeBuffer()
+		udp.SetNetworkLayerForChecksum(ip)
+		err = udp.SerializeTo(udpBuf, serializeOpts)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// write all layers to buffer
+		var buf bytes.Buffer
+		l := packet.Layers()
+		for _, layer := range l {
+			switch layer.LayerType() {
+			case layers.LayerTypeIPv4:
+				buf.Write(ipBuf.Bytes())
+			case layers.LayerTypeUDP:
+				buf.Write(udpBuf.Bytes())
+			default:
+				buf.Write(layer.LayerContents())
+			}
+		}
+		h.outHandle.WritePacketData(buf.Bytes())
 	}
-	h.outHandle.WritePacketData(buf.Bytes())
 }
 
 // listen captures packets on the network interface and parses them

@@ -50,6 +50,8 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 		// modify source and destination IP
 		if srcIP != nil {
 			ip.SrcIP = srcIP
+		} else {
+			ip.SrcIP = dest.srcIP
 		}
 		ip.DstIP = dest.ip
 

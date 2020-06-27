@@ -51,7 +51,7 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 		if srcIP != nil {
 			ip.SrcIP = srcIP
 		}
-		ip.DstIP = dest
+		ip.DstIP = dest.ip
 
 		// serialize modified ip layer
 		ipBuf := gopacket.NewSerializeBuffer()

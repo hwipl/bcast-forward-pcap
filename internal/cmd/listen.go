@@ -114,6 +114,9 @@ func listen() {
 	listener.Prepare()
 	handler.outHandle = listener.PcapHandle
 
+	// print some info before entering main loop
+	printInfo()
+
 	// enter listener loop
 	listener.Loop()
 }

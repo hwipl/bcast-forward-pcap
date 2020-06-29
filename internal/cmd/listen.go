@@ -87,10 +87,41 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 	}
 }
 
+type outputHandler struct {
+}
+
+func (h *outputHandler) HandlePacket(packet gopacket.Packet) {
+}
+
 // getOutputListener gets a listener on device for sending packets to a
 // forwarding destination
 func getOutputListener(dev string) *pcap.Listener {
-	return listeners[dev]
+	// try to get an existing listener
+	l := listeners[dev]
+	if l != nil {
+		return l
+	}
+
+	// listener does not exist, get a new one
+	// configure pcap
+	pcapDevice := dev
+	pcapFilter := ""
+	pcapSnaplen := 1024
+
+	// create listener
+	var handler outputHandler
+	listener := pcap.Listener{
+		PacketHandler: &handler,
+		Device:        pcapDevice,
+		Filter:        pcapFilter,
+		Snaplen:       pcapSnaplen,
+	}
+
+	// prepare listener and add it to listeners
+	listener.Prepare()
+	listeners[listener.Device] = &listener
+
+	return &listener
 }
 
 // listen captures packets on the network interface and parses them

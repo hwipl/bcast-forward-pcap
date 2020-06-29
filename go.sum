@@ -1,7 +1,7 @@
 github.com/google/gopacket v1.1.17 h1:rMrlX2ZY2UbvT+sdz3+6J+pp2z+msCq9MxTU6ymxbBY=
 github.com/google/gopacket v1.1.17/go.mod h1:UdDNZ1OO62aGYVnPhxT1U6aI7ukYtA/kB8vaU0diBUM=
-github.com/hwipl/packet-go v0.0.0-20200624144813-72403e9d0b28 h1:N5TnpSLzqgHn54Q58pIpVMoWvQAqXTSF+wXDZ+Ydeyw=
-github.com/hwipl/packet-go v0.0.0-20200624144813-72403e9d0b28/go.mod h1:GGvtzvqGHwL6nNLrD7u6nJ9xTGMUPREufcfnC8b+WVk=
+github.com/hwipl/packet-go v0.0.0-20200629161832-32eaac89b0cc h1:AEOnZKw/mKdKbykoCofvD2OVlPnl6PSIyTHpnODDdqI=
+github.com/hwipl/packet-go v0.0.0-20200629161832-32eaac89b0cc/go.mod h1:GGvtzvqGHwL6nNLrD7u6nJ9xTGMUPREufcfnC8b+WVk=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3 h1:0GoQqolDA55aaLxZyTzK/Y2ePZzZTUrRacwib7cNsYQ=
 golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3/go.mod h1:t9HGtf8HONx5eT2rtn7q6eTqICYqUVnKs3thJo3Qplg=

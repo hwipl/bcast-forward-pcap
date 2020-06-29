@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"log"
 	"net"
-
-	"github.com/google/gopacket/pcap"
 )
 
 // dest stores information about a forwarding destination
 type dest struct {
-	dev   string
+	dev   net.Interface
 	ip    net.IP
 	srcIP net.IP
 }
@@ -33,16 +31,29 @@ func (d *dest) getSourceIP() {
 // getDevice gets the device used for the forwarding destination
 func (d *dest) getDevice() {
 	// get all network devices
-	devs, err := pcap.FindAllDevs()
+	devs, err := net.Interfaces()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// find the name of the device that uses the source IP address
 	for _, dev := range devs {
-		for _, addr := range dev.Addresses {
-			if addr.IP.Equal(d.srcIP) {
-				d.dev = dev.Name
+		// get addresses of device
+		addrs, err := dev.Addrs()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// find source IP in addresses
+		for _, addr := range addrs {
+			// addr contains prefix length, parse it
+			ip, _, err := net.ParseCIDR(addr.String())
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			if ip.Equal(d.srcIP) {
+				d.dev = dev
 				return
 			}
 		}

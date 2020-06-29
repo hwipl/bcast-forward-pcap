@@ -4,13 +4,16 @@ import (
 	"fmt"
 	"log"
 	"net"
+
+	"github.com/google/gopacket/pcap"
 )
 
 // dest stores information about a forwarding destination
 type dest struct {
-	dev   net.Interface
-	ip    net.IP
-	srcIP net.IP
+	dev    net.Interface
+	ip     net.IP
+	srcIP  net.IP
+	handle *pcap.Handle
 }
 
 // getSourceIP gets the source IP used for the forwarding destination

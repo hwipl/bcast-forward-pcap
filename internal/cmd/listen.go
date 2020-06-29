@@ -7,7 +7,6 @@ import (
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
-	gopktPcap "github.com/google/gopacket/pcap"
 	"github.com/hwipl/packet-go/pkg/pcap"
 )
 
@@ -20,7 +19,6 @@ var (
 )
 
 type handler struct {
-	outHandle *gopktPcap.Handle
 }
 
 func (h *handler) HandlePacket(packet gopacket.Packet) {
@@ -79,7 +77,7 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 				buf.Write(layer.LayerContents())
 			}
 		}
-		err = h.outHandle.WritePacketData(buf.Bytes())
+		err = dest.handle.WritePacketData(buf.Bytes())
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -106,9 +104,11 @@ func listen() {
 		Snaplen:       pcapSnaplen,
 	}
 
-	// prepare listener and store pcap handle in handler
+	// prepare listener and store pcap handle in destinations
 	listener.Prepare()
-	handler.outHandle = listener.PcapHandle
+	for _, dest := range dests {
+		dest.handle = listener.PcapHandle
+	}
 
 	// print some info before entering main loop
 	printInfo()

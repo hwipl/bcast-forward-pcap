@@ -17,9 +17,6 @@ var (
 	// dport is the destination port for packet matching
 	dport layers.UDPPort
 
-	// srcIP is the source IP used for source IP rewriting
-	srcIP net.IP
-
 	// dests is the list of IPs to forward the packets to
 	dests []*dest
 )
@@ -47,14 +44,6 @@ func parseCommandLine() {
 	}
 	dport = layers.UDPPort(port)
 
-	// parse source IP
-	if src != "" {
-		srcIP = net.ParseIP(src).To4()
-		if srcIP == nil {
-			log.Fatal("invalid source IP: ", src)
-		}
-	}
-
 	// make sure destination IPs are present and valid
 	if dest == "" {
 		log.Fatal("you must specify a destination IP")
@@ -68,6 +57,19 @@ func parseCommandLine() {
 			log.Fatal("invalid destination IP: ", d)
 		}
 		dests = append(dests, dst)
+	}
+
+	// parse source IP
+	if src != "" {
+		srcIP := net.ParseIP(src).To4()
+		if srcIP == nil {
+			log.Fatal("invalid source IP: ", src)
+		}
+
+		// change source IP in all destinations
+		for _, d := range dests {
+			d.srcIP = srcIP
+		}
 	}
 }
 

@@ -16,6 +16,9 @@ var (
 		FixLengths:       false,
 		ComputeChecksums: true,
 	}
+
+	// listeners maps device names to listeners
+	listeners = make(map[string]*pcap.Listener)
 )
 
 type handler struct {
@@ -84,6 +87,12 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 	}
 }
 
+// getOutputListener gets a listener on device for sending packets to a
+// forwarding destination
+func getOutputListener(dev string) *pcap.Listener {
+	return listeners[dev]
+}
+
 // listen captures packets on the network interface and parses them
 func listen() {
 	// create handler
@@ -104,10 +113,18 @@ func listen() {
 		Snaplen:       pcapSnaplen,
 	}
 
-	// prepare listener and store pcap handle in destinations
+	// prepare listener and add it to listeners
 	listener.Prepare()
+	listeners[listener.Device] = &listener
+
+	// get pcap handles for forwarding destinations
 	for _, dest := range dests {
-		dest.handle = listener.PcapHandle
+		l := getOutputListener(dest.dev.Name)
+		if l == nil {
+			log.Fatalf("error setting handle for destination %s",
+				dest.ip)
+		}
+		dest.handle = l.PcapHandle
 	}
 
 	// print some info before entering main loop

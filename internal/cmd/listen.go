@@ -156,6 +156,15 @@ func listen() {
 				dest.ip)
 		}
 		dest.handle = l.PcapHandle
+
+		// check link type
+		if dest.handle.LinkType() != listener.PcapHandle.LinkType() {
+			log.Fatalf("link type %s of %s and "+
+				"link type %s of %s differ",
+				listener.PcapHandle.LinkType(),
+				listener.Device, dest.handle.LinkType(),
+				l.Device)
+		}
 	}
 
 	// print some info before entering main loop

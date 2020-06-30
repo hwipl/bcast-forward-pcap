@@ -182,6 +182,17 @@ func getOutputListener(dev string) *pcap.Listener {
 	return &listener
 }
 
+// checkLinkType checks if the link type used by the listener l is supported
+func checkLinkType(l *pcap.Listener) {
+	// use the string representation because raw seems to have other
+	// numeric values besides the documented 101
+	lt := l.PcapHandle.LinkType().String()
+	if lt != "Ethernet" && lt != "Raw" {
+		log.Fatalf("link type %d of device %s not supported",
+			l.PcapHandle.LinkType(), l.Device)
+	}
+}
+
 // listen captures packets on the network interface and parses them
 func listen() {
 	// create handler
@@ -208,6 +219,7 @@ func listen() {
 	// prepare listener and add it to listeners
 	listener.Prepare()
 	listeners[listener.Device] = &listener
+	checkLinkType(&listener)
 
 	// get pcap handles for forwarding destinations
 	for _, dest := range dests {
@@ -217,15 +229,7 @@ func listen() {
 				dest.ip)
 		}
 		dest.handle = l.PcapHandle
-
-		// check link type
-		if dest.handle.LinkType() != listener.PcapHandle.LinkType() {
-			log.Fatalf("link type %s of %s and "+
-				"link type %s of %s differ",
-				listener.PcapHandle.LinkType(),
-				listener.Device, dest.handle.LinkType(),
-				l.Device)
-		}
+		checkLinkType(l)
 	}
 
 	// print some info before entering main loop

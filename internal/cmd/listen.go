@@ -132,7 +132,10 @@ func listen() {
 	// configure pcap
 	pcapFile := ""
 	pcapDevice := dev
-	pcapFilter := "ip dst host 255.255.255.255"
+	pcapFilter := "ip dst host 255.255.255.255 and udp"
+	if dport != 0 {
+		pcapFilter += fmt.Sprintf(" dst port %d", dport)
+	}
 	pcapSnaplen := 2048
 
 	// create listener

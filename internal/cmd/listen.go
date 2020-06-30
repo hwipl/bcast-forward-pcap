@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"net"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
@@ -20,6 +21,40 @@ var (
 	// listeners maps device names to listeners
 	listeners = make(map[string]*pcap.Listener)
 )
+
+// getEthernetLayer returns an ethernet layer of/for packet
+func getEthernetLayer(packet gopacket.Packet) *layers.Ethernet {
+	var eth *layers.Ethernet
+
+	// check first layer in packet
+	layer := packet.Layers()[0]
+	switch layer.LayerType() {
+	case layers.LayerTypeEthernet:
+		// first layer is an ethernet layer, use it
+		eth = layer.(*layers.Ethernet)
+	case layers.LayerTypeIPv4:
+		// first header is not an ethernet layer, construct one
+		srcMAC, err := net.ParseMAC("00:00:00:00:00:00")
+		if err != nil {
+			log.Fatal(err)
+		}
+		dstMAC, err := net.ParseMAC("ff:ff:ff:ff:ff:ff")
+		if err != nil {
+			log.Fatal(err)
+		}
+		e := layers.Ethernet{
+			SrcMAC:       srcMAC,
+			DstMAC:       dstMAC,
+			EthernetType: layers.EthernetTypeIPv4,
+		}
+		eth = &e
+	default:
+		// unexpected header, fail
+		log.Fatal("unexpected first layer in packet")
+	}
+
+	return eth
+}
 
 type handler struct {
 }
@@ -42,19 +77,34 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 	}
 	ip, _ := ipLayer.(*layers.IPv4)
 
+	// get ethernet layer
+	eth := getEthernetLayer(packet)
+
 	// print packet info to console
 	fmt.Printf("Got packet: %s:%d -> %s:%d\n", ip.SrcIP,
 		udp.SrcPort, ip.DstIP, udp.DstPort)
 
 	// forward packet to all destination IPs
 	for _, dest := range dests {
+		// modify source MAC address
+		if dest.dev.HardwareAddr != nil {
+			eth.SrcMAC = dest.dev.HardwareAddr
+		}
+
+		// serialize modified mac layer
+		ethBuf := gopacket.NewSerializeBuffer()
+		err := eth.SerializeTo(ethBuf, serializeOpts)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		// modify source and destination IP
 		ip.SrcIP = dest.srcIP
 		ip.DstIP = dest.ip
 
 		// serialize modified ip layer
 		ipBuf := gopacket.NewSerializeBuffer()
-		err := ip.SerializeTo(ipBuf, serializeOpts)
+		err = ip.SerializeTo(ipBuf, serializeOpts)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -67,11 +117,19 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 			log.Fatal(err)
 		}
 
-		// write all layers to buffer
+		// write ethernet layer to buffer
 		var buf bytes.Buffer
+		if dest.handle.LinkType() == layers.LinkTypeEthernet {
+			// ethBuf is padded to 60 bytes, only write header
+			buf.Write(ethBuf.Bytes()[:14])
+		}
+
+		// write all other layers to buffer
 		l := packet.Layers()
 		for _, layer := range l {
 			switch layer.LayerType() {
+			case layers.LayerTypeEthernet:
+				// skip original ethernet header
 			case layers.LayerTypeIPv4:
 				buf.Write(ipBuf.Bytes())
 			case layers.LayerTypeUDP:

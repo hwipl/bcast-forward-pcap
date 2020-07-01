@@ -13,16 +13,18 @@ func printInfo() {
 		port = "any"
 	}
 
-	pFmt := "Receiving broadcast packets with destination port:    %s\n"
+	iFmt := "Receiving UDP broadcast packets on interface:         %s\n"
+	pFmt := "  with destination port:                              %s\n"
 	dFmt := "Forwarding packets to IP:                             %s\n"
-	iFmt := "  On interface:                                       %s\n"
+	oFmt := "  On interface:                                       %s\n"
 	sFmt := "  Rewriting source address to IP:                     %s\n"
 
 	fmt.Println(sep)
+	fmt.Printf(iFmt, dev)
 	fmt.Printf(pFmt, port)
 	for _, d := range dests {
 		fmt.Printf(dFmt, d.ip)
-		fmt.Printf(iFmt, d.dev.Name)
+		fmt.Printf(oFmt, d.dev.Name)
 		fmt.Printf(sFmt, d.srcIP)
 	}
 	fmt.Println(sep)

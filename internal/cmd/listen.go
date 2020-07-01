@@ -221,6 +221,9 @@ func listen() {
 	listeners[listener.Device] = &listener
 	checkLinkType(&listener)
 
+	// save listener device in global variable for later output
+	dev = listener.Device
+
 	// get pcap handles for forwarding destinations
 	for _, dest := range dests {
 		l := getOutputListener(dest.dev.Name)

@@ -1,11 +1,11 @@
 # bcast-forward-pcap
 
 bcast-forward-pcap is a command line tool that forwards UDP broadcast packets
-with destination IP 255.255.255.255 received on a network interface to a
+with destination IP `255.255.255.255` received on a network interface to a
 specified list of unicast addresses possibly on other network interfaces. For
 example, it can be used for playing old LAN games, that use broadcasts to
 discover game servers, over a VPN tunnel. bcast-forward-pcap uses pcap for
-receiving and sending packets. For an IP/UDP raw sockets version, see
+receiving and sending packets. For an IP/UDP raw socket version, see
 [bcast-forward](https://github.com/hwipl/bcast-forward/).
 
 ## Installation

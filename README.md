@@ -14,7 +14,7 @@ You can download and install bcast-forward-pcap with its dependencies to your
 GOPATH or GOBIN with the go tool:
 
 ```console
-$ go get github.com/hwipl/bcast-forward-pcap/cmd/bcast-forward-pcap
+$ go install github.com/hwipl/bcast-forward-pcap/cmd/bcast-forward-pcap
 ```
 
 Note: you also need to have (lib)pcap installed on your system to use

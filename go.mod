@@ -1,6 +1,6 @@
 module github.com/hwipl/bcast-forward-pcap
 
-go 1.14
+go 1.18
 
 require (
 	github.com/google/gopacket v1.1.17

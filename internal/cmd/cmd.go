@@ -6,7 +6,7 @@ import (
 	"net"
 	"strings"
 
-	"github.com/google/gopacket/layers"
+	"github.com/gopacket/gopacket/layers"
 )
 
 // global variables set via command line arguments:

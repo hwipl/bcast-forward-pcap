@@ -5,7 +5,7 @@ import (
 	"log"
 	"net"
 
-	"github.com/google/gopacket/pcap"
+	"github.com/gopacket/gopacket/pcap"
 )
 
 // dest stores information about a forwarding destination

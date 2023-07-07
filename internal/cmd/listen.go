@@ -99,7 +99,9 @@ func (h *handler) HandlePacket(packet gopacket.Packet) {
 		}
 
 		// modify source and destination IP
-		ip.SrcIP = dest.srcIP
+		if !keepSrcIP {
+			ip.SrcIP = dest.srcIP
+		}
 		ip.DstIP = dest.ip
 
 		// serialize modified ip layer

@@ -17,6 +17,9 @@ var (
 	// dport is the destination port for packet matching
 	dport layers.UDPPort
 
+	// keepSrcIP specifies whether source IP rewriting is disabled
+	keepSrcIP bool
+
 	// dests is the list of IPs to forward the packets to
 	dests []*dest
 )
@@ -33,6 +36,7 @@ func parseCommandLine() {
 	flag.IntVar(&port, "p", port,
 		"only forward packets with this destination `port`")
 	flag.StringVar(&src, "s", src, "rewrite source address to this `IP`")
+	flag.BoolVar(&keepSrcIP, "keep-source-ip", keepSrcIP, "keep source address")
 	flag.StringVar(&dest, "d", dest, "forward broadcast packets to "+
 		"this comma-separated list of `IPs`, "+
 		"e.g., \"192.168.1.1,192.168.1.2\"")

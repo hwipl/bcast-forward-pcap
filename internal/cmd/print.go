@@ -25,7 +25,9 @@ func printInfo() {
 	for _, d := range dests {
 		fmt.Printf(dFmt, d.ip)
 		fmt.Printf(oFmt, d.dev.Name)
-		fmt.Printf(sFmt, d.srcIP)
+		if !keepSrcIP {
+			fmt.Printf(sFmt, d.srcIP)
+		}
 	}
 	fmt.Println(sep)
 }

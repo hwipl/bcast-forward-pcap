@@ -1,7 +1,7 @@
-github.com/gopacket/gopacket v1.0.1-0.20230225095122-6457da64b08f h1:C8l7xfkd5dT3+SYTggOrprW30eDbBZzWXqCBvyyvpkI=
-github.com/gopacket/gopacket v1.0.1-0.20230225095122-6457da64b08f/go.mod h1:HavMeONEl7W9036of9LbSWoonqhH7HA1+ZRO+rMIvFs=
-github.com/hwipl/packet-go v0.0.0-20230226103641-5b033f860f66 h1:04cAjqvysiB/6r+KWasDHJ9iEnPh1h7N+lezNTy9FIE=
-github.com/hwipl/packet-go v0.0.0-20230226103641-5b033f860f66/go.mod h1:jNuJgA2Eb92WEC0uyqLzsfnCYSfk6Brq2yw+QXfsj8c=
-golang.org/x/net v0.7.0 h1:rJrUqqhjsgNp7KqAIc25s9pZnjU7TUcSY7HcVZjdn1g=
-golang.org/x/sys v0.5.0 h1:MUK/U/4lj1t1oPg0HfuXDN/Z1wv31ZJ/YcPiGccS4DU=
-golang.org/x/sys v0.5.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+github.com/gopacket/gopacket v1.1.1 h1:zbx9F9d6A7sWNkFKrvMBZTfGgxFoY4NgUudFVVHMfcw=
+github.com/gopacket/gopacket v1.1.1/go.mod h1:HavMeONEl7W9036of9LbSWoonqhH7HA1+ZRO+rMIvFs=
+github.com/hwipl/packet-go v0.0.0-20231017084534-aeef2764812d h1:qvjhulSw3PX5APDJgegV7aC7WH9YbDyPaL3DEzbQqA4=
+github.com/hwipl/packet-go v0.0.0-20231017084534-aeef2764812d/go.mod h1:EsPEW3BhaKHxCywspZmiFcGtA0oPxltC2vquDLmXRfA=
+golang.org/x/net v0.17.0 h1:pVaXccu2ozPjCXewfr1S7xza/zcXTity9cCdXQYSjIM=
+golang.org/x/sys v0.13.0 h1:Af8nKPmuFypiUBjVoU9V20FiaFXOcuZI21p0ycVYYGE=
+golang.org/x/sys v0.13.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

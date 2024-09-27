@@ -1,8 +1,8 @@
-github.com/gopacket/gopacket v1.2.1-0.20240421060606-f0b345d69514 h1:nYh2wAwbY0imsX6lrpbskg5nOn2JT9gN6gLnNj+qyAk=
-github.com/gopacket/gopacket v1.2.1-0.20240421060606-f0b345d69514/go.mod h1:s3MpO1qlfejTorjdMc0XCvxfcH72FV67S32V39vLDfI=
-github.com/hwipl/packet-go v0.0.0-20240428181414-c3550ec3d048 h1:MrJ2aA7JINudB3vW3QDJ2ew+QBc5aFce344mJm6aCsI=
-github.com/hwipl/packet-go v0.0.0-20240428181414-c3550ec3d048/go.mod h1:APzh8gVhedeodVeAxlujKbN9lAx1ZN1cY20fyfH6PpA=
-golang.org/x/net v0.23.0 h1:7EYJ93RZ9vYSZAIb2x3lnuvqO5zneoD6IvWjuhfxjTs=
-golang.org/x/net v0.23.0/go.mod h1:JKghWKKOSdJwpW2GEx0Ja7fmaKnMsbu+MWVZTokSYmg=
-golang.org/x/sys v0.19.0 h1:q5f1RH2jigJ1MoAWp2KTp3gm5zAGFUTarQZ5U386+4o=
-golang.org/x/sys v0.19.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
+github.com/gopacket/gopacket v1.3.0 h1:MouZCc+ej0vnqzB0WeiaO/6+tGvb+KU7UczxoQ+X0Yc=
+github.com/gopacket/gopacket v1.3.0/go.mod h1:WnFrU1Xkf5lWKV38uKNR9+yYtppn+ZYzOyNqMeH4oNE=
+github.com/hwipl/packet-go v0.0.0-20240923071542-f4c47313d3a7 h1:qDawuubIntTB1lKLHbDHGqNG7BC3oNDLHGE1Ohr6RQM=
+github.com/hwipl/packet-go v0.0.0-20240923071542-f4c47313d3a7/go.mod h1:3yT4oeQ5zOhX4pcLp49vmiRMOUQ9yqUOY8V/RHFc2cM=
+golang.org/x/net v0.28.0 h1:a9JDOJc5GMUJ0+UDqmLT86WiEy7iWyIhz8gz8E4e5hE=
+golang.org/x/net v0.28.0/go.mod h1:yqtgsTWOOnlGLG9GFRrK3++bGOUEkNBoHZc8MEDWPNg=
+golang.org/x/sys v0.25.0 h1:r+8e+loiHxRqhXVl6ML1nO3l1+oFoWbnlu2Ehimmi34=
+golang.org/x/sys v0.25.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
